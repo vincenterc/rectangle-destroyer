@@ -7,7 +7,11 @@ import com.vincenterc.rectangledestroyer.RectangleGame
 object DesktopLauncher {
     @JvmStatic
     fun main(arg: Array<String>) {
-        val config = LwjglApplicationConfiguration()
+        val config = LwjglApplicationConfiguration().apply {
+            title = "Rectangle Destroyer"
+            width = 800
+            height = 600
+        }
         LwjglApplication(RectangleGame(), config)
     }
 }
