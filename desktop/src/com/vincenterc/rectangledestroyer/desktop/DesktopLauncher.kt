@@ -9,8 +9,8 @@ object DesktopLauncher {
     fun main(arg: Array<String>) {
         val config = LwjglApplicationConfiguration().apply {
             title = "Rectangle Destroyer"
-            width = 800
-            height = 600
+            width = 832
+            height = 640
         }
         LwjglApplication(RectangleGame(), config)
     }

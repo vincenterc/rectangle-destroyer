@@ -26,39 +26,89 @@ class LevelScreen : BaseScreen() {
     private lateinit var backgroundMusic: Music
 
     override fun initialize() {
-        val background = BaseActor(0f, 0f, mainStage)
-        background.loadTexture("space.png")
-        BaseActor.setWorldBounds(background)
+//        val background = BaseActor(0f, 0f, mainStage)
+//        background.loadTexture("space.png")
+//        BaseActor.setWorldBounds(background)
+//
+//        paddle = Paddle(320f, 32f, mainStage)
+//
+//        Wall(0f, 0f, 20f, 600f, mainStage)
+//        Wall(780f, 0f, 20f, 600f, mainStage)
+//
+//        // top wall has large height to create area for UI text.
+//        Wall(0f, 550f, 800f, 50f, mainStage)
 
-        paddle = Paddle(320f, 32f, mainStage)
+//        val tempBrick = Brick(0f, 0f, mainStage)
+//        val brickWidth = tempBrick.width
+//        val brickHeight = tempBrick.height
+//        tempBrick.remove()
 
-        Wall(0f, 0f, 20f, 600f, mainStage)
-        Wall(780f, 0f, 20f, 600f, mainStage)
+//        val totalRows = 10
+//        val totalCols = 10
+//        val marginX = (800 - totalCols * brickWidth) / 2
+//        val marginY = 600 - totalRows * brickHeight - 120
 
-        // top wall has large height to create area for UI text.
-        Wall(0f, 550f, 800f, 50f, mainStage)
+//        for (rowNum in 0 until totalRows) {
+//            for (colNum in 0 until totalCols) {
+//                val x = marginX + brickWidth * colNum
+//                val y = marginY + brickHeight * rowNum
+//                Brick(x, y, mainStage)
+//            }
+//        }
+
+        var tma = TilemapActor("map.tmx", mainStage)
+
+        for (obj in tma.getTileList("Wall")) {
+            var props = obj.properties
+            Wall(props.get("x") as Float, props.get("y") as Float,
+                    props.get("width") as Float, props.get("height") as Float,
+                    mainStage)
+        }
+
+        for (obj in tma.getTileList("Brick")) {
+            var props = obj.properties
+            var b = Brick(props.get("x") as Float, props.get("y") as Float, mainStage)
+            b.setSize(props.get("width") as Float, props.get("height") as Float)
+            b.setBoundaryRectangle()
+
+            var colorName = props.get("color")
+            when (colorName) {
+                "red" -> {
+                    b.color = Color.RED
+                }
+                "orange" -> {
+                    b.color = Color.ORANGE
+                }
+                "yellow" -> {
+                    b.color = Color.YELLOW
+                }
+                "green" -> {
+                    b.color = Color.GREEN
+                }
+                "blue" -> {
+                    b.color = Color.BLUE
+                }
+                "purple" -> {
+                    b.color = Color.PURPLE
+                }
+                "white" -> {
+                    b.color = Color.WHITE
+                }
+                "gray" -> {
+                    b.color = Color.GRAY
+                }
+            }
+        }
+
+        var startPoint = tma.getRectangleList("start")[0]
+        var props = startPoint.properties
+        paddle = Paddle(props.get("x") as Float, props.get("y") as Float, mainStage)
 
         ball = Ball(0f, 0f, mainStage)
 
-        val tempBrick = Brick(0f, 0f, mainStage)
-        val brickWidth = tempBrick.width
-        val brickHeight = tempBrick.height
-        tempBrick.remove()
-
-        val totalRows = 10
-        val totalCols = 10
-        val marginX = (800 - totalCols * brickWidth) / 2
-        val marginY = 600 - totalRows * brickHeight - 120
-
-        for (rowNum in 0 until totalRows) {
-            for (colNum in 0 until totalCols) {
-                val x = marginX + brickWidth * colNum
-                val y = marginY + brickHeight * rowNum
-                Brick(x, y, mainStage)
-            }
-        }
         score = 0
         balls = 3
+
         scoreLabel = Label("Score: $score", BaseGame.labelStyle)
         ballsLabel = Label("Balls: $balls", BaseGame.labelStyle)
         messageLabel = Label("click to start", BaseGame.labelStyle)
